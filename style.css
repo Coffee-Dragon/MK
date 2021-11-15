@@ -261,8 +261,11 @@ body {
 .button:active::after {
     top: 1px;
 }
+.button:disabled {
+    opacity: 0.7;
+}
 
-.loseTitle {
+.winTitle {
     position: absolute;
     top: 25%;
     left: 50%;

@@ -15,7 +15,7 @@ const player1 = {
 const player2 = {
     playerNo: 2,
     name: 'THOR',
-    hp: 80,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
     weapon: ['sword', 'bow', 'knife', 'morgenshtern', 'fireball'],
     attack: function() {
@@ -58,20 +58,18 @@ function createPlayer(playerObj) {
 function changeHP(player) {
     const $lifebar = document.querySelector(`.player${player.playerNo} .life`);
     player.hp -= Math.floor(Math.random() * 19) + 1;
-    
+
     if (player.hp <= 0) {
-        $arenasdiv.appendChild(playerLoses(player.name));
         player.hp = 0;
     }
 
     $lifebar.style.width = `${player.hp}%`;
 };
 
-function playerLoses(name) {
-    const $loseTitle = createElement('div', 'loseTitle');
-    $loseTitle.innerText = name + ' loses!';
-
-    return $loseTitle;
+function playerWins(name) {
+    const $winTitle = createElement('div', 'winTitle');
+    $winTitle.innerText = name + ' wins!';
+    $arenasdiv.appendChild($winTitle);
 };
 
 $randomBtn.addEventListener('click', function() {
@@ -79,6 +77,14 @@ $randomBtn.addEventListener('click', function() {
 
     changeHP(player1);
     changeHP(player2);
+
+    if (player1.hp === 0) {
+        playerWins(player2.name);
+        $randomBtn.disabled = true;
+    } else if (player2.hp === 0) {
+        playerWins(player1.name);
+        $randomBtn.disabled = true;
+    }
 
 });
 
