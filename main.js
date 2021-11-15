@@ -1,9 +1,10 @@
 const $arenasdiv = document.querySelector('.arenas');
+const $randomButton = document.querySelector('.button');
 
 const player1 = {
     playerNo: 1,
     name: 'LOKI',
-    hp: 90,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['sword', 'bow', 'knife', 'morgenshtern', 'fireball'],
     attack: function() {
@@ -14,7 +15,7 @@ const player1 = {
 const player2 = {
     playerNo: 2,
     name: 'THOR',
-    hp: 70,
+    hp: 80,
     img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
     weapon: ['sword', 'bow', 'knife', 'morgenshtern', 'fireball'],
     attack: function() {
@@ -53,6 +54,9 @@ function createPlayer(playerObj) {
     return $playerdiv;
 };
 
+$randomButton.addEventListener('click', function () {
+    console.log('!!!: Random Button clicked!');
+})
 $arenasdiv.appendChild(createPlayer(player1));
 $arenasdiv.appendChild(createPlayer(player2));
 
