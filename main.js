@@ -58,11 +58,13 @@ function createPlayer(playerObj) {
 function changeHP(player) {
     const $lifebar = document.querySelector(`.player${player.playerNo} .life`);
     player.hp -= 20;
-    $lifebar.style.width = `${player.hp}%`;
 
-    if (player.hp < 0) {
+    if (player.hp <= 0) {
         $arenasdiv.appendChild(playerLoses(player.name));
+        player.hp = 0;
     }
+
+    $lifebar.style.width = `${player.hp}%`;
 };
 
 function playerLoses(name) {
