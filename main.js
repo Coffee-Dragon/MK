@@ -57,8 +57,8 @@ function createPlayer(playerObj) {
 
 function changeHP(player) {
     const $lifebar = document.querySelector(`.player${player.playerNo} .life`);
-    player.hp -= 20;
-
+    player.hp -= Math.floor(Math.random() * 19) + 1;
+    
     if (player.hp <= 0) {
         $arenasdiv.appendChild(playerLoses(player.name));
         player.hp = 0;
