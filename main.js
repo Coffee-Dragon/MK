@@ -1,7 +1,9 @@
+const $arenasdiv = document.querySelector('.arenas');
+
 const player1 = {
-    name: '',
-    hp: 0,
-    img: '',
+    name: 'LOKI',
+    hp: 90,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['sword', 'bow', 'knife', 'morgenshtern', 'fireball'],
     attack: function() {
         console.log(player1.name + ' Fight!')
@@ -9,47 +11,46 @@ const player1 = {
 };
 
 const player2 = {
-    name: '',
-    hp: 0,
-    img: '',
+    name: 'THOR',
+    hp: 70,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
     weapon: ['sword', 'bow', 'knife', 'morgenshtern', 'fireball'],
     attack: function() {
         console.log(player2.name + ' Fight!')
     },
 };
-//в функцию добавила четвертый параметр для картинки, а то ощущение, что у игрока раздвоение личности под разными именами ж)
 
-const $arenasdiv = document.querySelector('.arenas');
+function createElement(tag, className) {
+    const $tag = document.createElement(tag);
+    if (className) {
+        $tag.classList.add(className);
+    }
 
-function createPlayer(playerClass, playerName, playerLife, playerImg) {
-    const $playerdiv = document.createElement('div');
-    $playerdiv.classList.add(playerClass);
+    return $tag;
+};
 
-    const $progressbardiv = document.createElement('div');
-    $progressbardiv.classList.add('progressbar');
+function createPlayer(playerClass, playerObj) {
+    const $playerdiv = createElement('div', playerClass);
+    const $progressbardiv = createElement('div', 'progressbar');
+    const $lifediv = createElement('div', 'life');
+    const $namediv = createElement('div', 'name');
+    const $characterdiv = createElement('div', 'character');
+    const $img = createElement('img');
 
-    const $lifediv = document.createElement('div');
-    $lifediv.classList.add('life');
-    $lifediv.style.width = `${playerLife}%`;
+    $lifediv.style.width = `${playerObj.hp}%`;
+    $namediv.innerText = playerObj.name;
+    $img.src = playerObj.img;
 
-    const $namediv = document.createElement('div');
-    $namediv.classList.add('name');
-    $namediv.innerText = playerName;
-
-    const $characterdiv = document.createElement('div');
-    $characterdiv.classList.add('character');
-    const $img = document.createElement('img');
-    $img.src = `http://reactmarathon-api.herokuapp.com/assets/${playerImg}.gif`;
     $characterdiv.appendChild($img);
-
     $progressbardiv.appendChild($lifediv);
     $progressbardiv.appendChild($namediv);
 
     $playerdiv.appendChild($progressbardiv);
     $playerdiv.appendChild($characterdiv);
 
-    $arenasdiv.appendChild($playerdiv);
-}
+    return $playerdiv;
+};
 
-createPlayer('player1', 'Loki', 90, 'kitana');
-createPlayer('player2', 'Thor', 50, 'liukang');
+$arenasdiv.appendChild(createPlayer('player1', player1));
+$arenasdiv.appendChild(createPlayer('player2', player2));
+
