@@ -19,6 +19,8 @@ const player2 = {
 };
 //в функцию добавила четвертый параметр для картинки, а то ощущение, что у игрока раздвоение личности под разными именами ж)
 
+const $arenasdiv = document.querySelector('.arenas');
+
 function createPlayer(playerClass, playerName, playerLife, playerImg) {
     const $playerdiv = document.createElement('div');
     $playerdiv.classList.add(playerClass);
@@ -46,8 +48,6 @@ function createPlayer(playerClass, playerName, playerLife, playerImg) {
     $playerdiv.appendChild($progressbardiv);
     $playerdiv.appendChild($characterdiv);
 
-
-    const $arenasdiv = document.querySelector('.arenas');
     $arenasdiv.appendChild($playerdiv);
 }
 
