@@ -10,6 +10,9 @@ const player1 = {
     attack: function() {
         console.log(player1.name + ' Fight!')
     },
+    elHP,
+    renderHP,
+    changeHP,
 };
 
 const player2 = {
@@ -21,6 +24,9 @@ const player2 = {
     attack: function() {
         console.log(player2.name + ' Fight!')
     },
+    elHP,
+    renderHP,
+    changeHP,
 };
 
 function createElement(tag, className) {
@@ -55,36 +61,50 @@ function createPlayer(playerObj) {
     return $playerdiv;
 };
 
-function changeHP(player) {
-    const $lifebar = document.querySelector(`.player${player.playerNo} .life`);
-    player.hp -= Math.floor(Math.random() * 19) + 1;
-
-    if (player.hp <= 0) {
-        player.hp = 0;
-    }
-
-    $lifebar.style.width = `${player.hp}%`;
+function getRandom() {
+    return Math.floor(Math.random() * 19) + 1;
 };
 
-function playerWins(name) {
+function elHP() {
+    return document.querySelector(`.player${this.playerNo} .life`);
+}
+function renderHP() {
+    this.elHP().style.width = `${this.hp}%`;
+}
+
+function changeHP(subtractHP) {
+    this.hp -= subtractHP;
+
+    if (this.hp <= 0) {
+        this.hp = 0;
+    }
+};
+
+function announceResult(name) {
     const $winTitle = createElement('div', 'winTitle');
-    $winTitle.innerText = name + ' wins!';
+
+    $winTitle.innerText = name ? `${name} wins!` : 'Draw';
     $arenasdiv.appendChild($winTitle);
 };
 
 $randomBtn.addEventListener('click', function() {
-    console.log('randomBtn clicked!!');
+    player1.changeHP(getRandom());
+    player1.renderHP();
+    player2.changeHP(getRandom());
+    player2.renderHP();
 
-    changeHP(player1);
-    changeHP(player2);
+    if (player1.hp === 0 && player2.hp > 0) {
+        announceResult(player2.name);
+    } else if (player2.hp === 0 && player1.hp > 0) {
+        announceResult(player1.name);
+    } else if (player1.hp === 0 && player2.hp === 0) {
+        announceResult();
+    }
 
-    if (player1.hp === 0) {
-        playerWins(player2.name);
-        $randomBtn.disabled = true;
-    } else if (player2.hp === 0) {
-        playerWins(player1.name);
+    if (player1.hp === 0 || player2.hp === 0) {
         $randomBtn.disabled = true;
     }
+
 
 });
 
