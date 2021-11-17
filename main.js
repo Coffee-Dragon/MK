@@ -87,6 +87,17 @@ function announceResult(name) {
     $arenasdiv.appendChild($winTitle);
 };
 
+function createReloadButton() {
+    const $reloadWrap = createElement('div', 'reloadWrap');
+    const $reloadBtn = createElement('button', 'button');
+    $reloadBtn.innerText = 'Reload';
+    $reloadWrap.appendChild($reloadBtn);
+    $reloadBtn.addEventListener('click', function() {
+        window.location.reload();
+    })
+    return $reloadWrap;
+}
+
 $randomBtn.addEventListener('click', function() {
     player1.changeHP(getRandom());
     player1.renderHP();
@@ -103,6 +114,7 @@ $randomBtn.addEventListener('click', function() {
 
     if (player1.hp === 0 || player2.hp === 0) {
         $randomBtn.disabled = true;
+        $arenasdiv.appendChild(createReloadButton());
     }
 
 
@@ -110,4 +122,7 @@ $randomBtn.addEventListener('click', function() {
 
 $arenasdiv.appendChild(createPlayer(player1));
 $arenasdiv.appendChild(createPlayer(player2));
+
+
+
 
