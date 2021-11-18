@@ -261,8 +261,23 @@ body {
 .button:active::after {
     top: 1px;
 }
+.button:disabled {
+    opacity: 0.7;
+}
 
-.loseTitle {
+.reloadWrap {
+    position: absolute;
+    top: 10%;
+    z-index: 1000;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.reloadWrap .button {
+    margin-top: 0;
+}
+
+.winTitle {
     position: absolute;
     top: 25%;
     left: 50%;
