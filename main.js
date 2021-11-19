@@ -1,5 +1,6 @@
 const $arenasdiv = document.querySelector('.arenas');
-const $randomBtn = document.querySelector('.button');
+const $formFight = document.querySelector('.control');
+//const $randomBtn = document.querySelector('.button');
 
 const player1 = {
     playerNo: 1,
@@ -13,8 +14,7 @@ const player1 = {
     elHP,
     renderHP,
     changeHP,
-};
-
+}
 const player2 = {
     playerNo: 2,
     name: 'THOR',
@@ -27,7 +27,13 @@ const player2 = {
     elHP,
     renderHP,
     changeHP,
-};
+}
+const HIT = {
+    head: 30,
+    body: 25,
+    foot: 20,
+}
+const ATTACK = ['head', 'body', 'foot'];
 
 function createElement(tag, className) {
     const $tag = document.createElement(tag);
@@ -36,7 +42,7 @@ function createElement(tag, className) {
     }
 
     return $tag;
-};
+}
 
 
 function createPlayer(playerObj) {
@@ -59,12 +65,12 @@ function createPlayer(playerObj) {
     $playerdiv.appendChild($characterdiv);
 
     return $playerdiv;
-};
+}
 
-function getRandom() {
-    return Math.floor(Math.random() * 19) + 1;
-};
-
+function getRandom(maxNum) {
+    return Math.ceil(Math.random()*maxNum);
+    //return Math.floor(Math.random() * 19) + 1;
+}
 function elHP() {
     return document.querySelector(`.player${this.playerNo} .life`);
 }
@@ -78,14 +84,14 @@ function changeHP(subtractHP) {
     if (this.hp <= 0) {
         this.hp = 0;
     }
-};
+}
 
 function announceResult(name) {
     const $winTitle = createElement('div', 'winTitle');
 
     $winTitle.innerText = name ? `${name} wins!` : 'Draw';
     $arenasdiv.appendChild($winTitle);
-};
+}
 
 function createReloadButton() {
     const $reloadWrap = createElement('div', 'reloadWrap');
@@ -98,31 +104,60 @@ function createReloadButton() {
     return $reloadWrap;
 }
 
-$randomBtn.addEventListener('click', function() {
-    player1.changeHP(getRandom());
-    player1.renderHP();
-    player2.changeHP(getRandom());
-    player2.renderHP();
+// $randomBtn.addEventListener('click', function() {
+//     player1.changeHP(getRandom(20));
+//     player1.renderHP();
+//     player2.changeHP(getRandom(20));
+//     player2.renderHP();
 
-    if (player1.hp === 0 && player2.hp > 0) {
-        announceResult(player2.name);
-    } else if (player2.hp === 0 && player1.hp > 0) {
-        announceResult(player1.name);
-    } else if (player1.hp === 0 && player2.hp === 0) {
-        announceResult();
-    }
+//     if (player1.hp === 0 && player2.hp > 0) {
+//         announceResult(player2.name);
+//     } else if (player2.hp === 0 && player1.hp > 0) {
+//         announceResult(player1.name);
+//     } else if (player1.hp === 0 && player2.hp === 0) {
+//         announceResult();
+//     }
 
-    if (player1.hp === 0 || player2.hp === 0) {
-        $randomBtn.disabled = true;
-        $arenasdiv.appendChild(createReloadButton());
-    }
+//     if (player1.hp === 0 || player2.hp === 0) {
+//         $randomBtn.disabled = true;
+//         $arenasdiv.appendChild(createReloadButton());
+//     }
 
-
-});
+//});
 
 $arenasdiv.appendChild(createPlayer(player1));
 $arenasdiv.appendChild(createPlayer(player2));
 
+function enemyAttack() {
+    const hit = ATTACK[getRandom(3)-1];
+    const defence = ATTACK[getRandom(3)-1];
 
+    return {
+        value: getRandom(HIT[hit]),
+        hit,
+        defence,
+    }
+}
+
+$formFight.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const enemy = enemyAttack();
+    const attack = {};
+
+    for (let item of $formFight) {
+        if (item.checked && item.name === 'hit') {
+            attack.value = getRandom(HIT[item.value]);
+            attack.hit = item.value;
+        }
+
+        if (item.checked && item.name === 'defence') {
+            attack.defence = item.value;
+
+        }
+        item.checked = false;
+    }
+    console.log('!!! a', attack);
+    console.log('!!! e', enemy);
+})
 
 
