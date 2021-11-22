@@ -176,10 +176,13 @@ function playerAttack() {
 function showResult() {
     if (player1.hp === 0 && player2.hp > 0) {
         announceResult(player2.name);
+        generateLogs('end', player2, player1);
     } else if (player2.hp === 0 && player1.hp > 0) {
         announceResult(player1.name);
+        generateLogs('end', player1, player2);
     } else if (player1.hp === 0 && player2.hp === 0) {
         announceResult();
+        generateLogs('draw');
     }
 
     if (player1.hp === 0 || player2.hp === 0) {
@@ -187,17 +190,39 @@ function showResult() {
         $arenasdiv.appendChild(createReloadButton());
     }
 }
+
 const date = new Date();
 const start = `<p>${logs['start'].replace('[player1]', player1.name).replace('[player2]', player2.name).replace('[time]', `${date.getHours()}:${date.getMinutes()}`)}</p>`;
 $chat.insertAdjacentHTML('afterbegin', start);
 
-function generateLogs(type, player1, player2) {
-    const text = logs[type][getRandom(18)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
-    console.log(text);
-    console.log(start);
-    const elem = `<p>${text}</p>`;
+function getLogText(logsList, attacker, defender) {
+    return logsList[getRandom(logsList.length-1)]
+        .replace('[playerKick]', attacker.name)
+        .replace('[playerDefence]', defender.name)
+        .replace('[playerWins]', attacker.name)
+        .replace('[playerLose]', defender.name);
+}
+
+function generateLogs(type, attacker, defender, subtractHP) {
+    let elem;
+    switch (type) {
+        case 'hit':
+            elem = `<p>${date.getHours()}:${date.getMinutes()} ${getLogText(logs.hit, attacker, defender)} [-${subtractHP} HP] [${defender.hp}/100]</p>`;
+            break;
+        case 'defence':
+            elem = `<p>${date.getHours()}:${date.getMinutes()} ${getLogText(logs.defence, attacker, defender)} [${defender.hp}/100]</p>`;
+            break;
+        case 'draw':
+            elem = `<p>${date.getHours()}:${date.getMinutes()} ${logs.draw}</p>`;
+            break;
+        case 'end':
+            elem = `<p>${date.getHours()}:${date.getMinutes()} ${getLogText(logs.end, attacker, defender)}</p>`;
+            break;
+    }
+    
     $chat.insertAdjacentHTML('afterbegin', elem);
 }
+
 $formFight.addEventListener('submit', function(e) {
     e.preventDefault();
     const enemy = enemyAttack();
@@ -205,12 +230,18 @@ $formFight.addEventListener('submit', function(e) {
     if (enemy.hit !== player.defence) {
         player1.changeHP(enemy.value);
         player1.renderHP();
-        generateLogs('hit', player2, player1);
+        generateLogs('hit', player2, player1, enemy.value);
     }
     if (player.hit !== enemy.defence) {
         player2.changeHP(player.value);
         player2.renderHP();
-        generateLogs('hit', player1, player2);
+        generateLogs('hit', player1, player2, player.value);
+    }
+    if (player.hit === enemy.defence) {
+        generateLogs('defence', player1, player2);
+    }
+    if (enemy.hit === player.defence) {
+        generateLogs('defence', player2, player1);
     }
     showResult();
 })
