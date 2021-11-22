@@ -187,9 +187,14 @@ function showResult() {
         $arenasdiv.appendChild(createReloadButton());
     }
 }
+const date = new Date();
+const start = `<p>${logs['start'].replace('[player1]', player1.name).replace('[player2]', player2.name).replace('[time]', `${date.getHours()}:${date.getMinutes()}`)}</p>`;
+$chat.insertAdjacentHTML('afterbegin', start);
+
 function generateLogs(type, player1, player2) {
     const text = logs[type][getRandom(18)].replace('[playerKick]', player1.name).replace('[playerDefence]', player2.name);
     console.log(text);
+    console.log(start);
     const elem = `<p>${text}</p>`;
     $chat.insertAdjacentHTML('afterbegin', elem);
 }
@@ -197,7 +202,6 @@ $formFight.addEventListener('submit', function(e) {
     e.preventDefault();
     const enemy = enemyAttack();
     const player = playerAttack();
-
     if (enemy.hit !== player.defence) {
         player1.changeHP(enemy.value);
         player1.renderHP();
