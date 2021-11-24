@@ -2,6 +2,7 @@ const $arenasdiv = document.querySelector('.arenas');
 const $formFight = document.querySelector('.control');
 const $randomBtn = document.querySelector('.button');
 const $chat = document.querySelector('.chat');
+const date = new Date();
 
 const player1 = {
     playerNo: 1,
@@ -191,10 +192,6 @@ function showResult() {
     }
 }
 
-const date = new Date();
-const start = `<p>${logs['start'].replace('[player1]', player1.name).replace('[player2]', player2.name).replace('[time]', `${date.getHours()}:${date.getMinutes()}`)}</p>`;
-$chat.insertAdjacentHTML('afterbegin', start);
-
 function getLogText(logsList, attacker, defender) {
     return logsList[getRandom(logsList.length-1)]
         .replace('[playerKick]', attacker.name)
@@ -206,6 +203,9 @@ function getLogText(logsList, attacker, defender) {
 function generateLogs(type, attacker, defender, subtractHP) {
     let elem;
     switch (type) {
+        case 'start':
+            elem = `<p>${logs['start'].replace('[player1]', player1.name).replace('[player2]', player2.name).replace('[time]', `${date.getHours()}:${date.getMinutes()}`)}</p>`;
+            break;
         case 'hit':
             elem = `<p>${date.getHours()}:${date.getMinutes()} ${getLogText(logs.hit, attacker, defender)} [-${subtractHP} HP] [${defender.hp}/100]</p>`;
             break;
@@ -246,4 +246,5 @@ $formFight.addEventListener('submit', function(e) {
     showResult();
 })
 
+generateLogs('start', player1, player2);
 
